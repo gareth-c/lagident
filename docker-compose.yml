@@ -1,0 +1,34 @@
+
+services:
+  app:
+    image: nook24/lagident:latest
+    #build: .
+    container_name: app
+    ports:
+      - 9933:8080
+    depends_on:
+      - db
+    environment:
+      PROFILE: prod
+      DB_TYPE: mysql   # mysql or sqlite
+      DB_HOST: db
+      DB_POST: 3306
+      DB_USER: lagident
+      DB_PASS: pass
+      DB_NAME: lagident
+    volumes:
+      - lagident-sqlite-data:/data
+  db:
+    image: mysql:8.0.31
+    container_name: db
+    environment:
+      MYSQL_DATABASE: lagident
+      MYSQL_USER: lagident
+      MYSQL_PASSWORD: pass
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - ./init-mysqldb.sql:/docker-entrypoint-initdb.d/init.sql
+
+# A volume mounted to /data in the app container to store the sqlite database
+volumes:
+  lagident-sqlite-data:

@@ -1,0 +1,14 @@
+
+services:
+  dev_db:
+    image: mysql:8.0.31
+    environment:
+      MYSQL_DATABASE: lagident
+      MYSQL_USER: lagident
+      MYSQL_PASSWORD: pass
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      DB_TYPE: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./init-mysqldb.sql:/docker-entrypoint-initdb.d/init.sql

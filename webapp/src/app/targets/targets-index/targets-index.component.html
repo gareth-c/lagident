@@ -1,0 +1,167 @@
+<!--
+https://primeflex.org/installation
+https://primeng.org/
+-->
+
+<div class="p-2 text-5xl">
+    <span class="gradient-headline">••<sup>•</sup>• Lagident</span>
+</div>
+
+<app-targets-add (targetAdded)="loadTargets()"></app-targets-add>
+
+<p-card header="Target overview">
+
+    <div class="w-100 text-right mb-2">
+        <p-toggleButton [(ngModel)]="autorefresh" (click)="toggleAutorefresh()" onLabel="Refresh" offLabel="Off"
+            onIcon="pi pi-sync" offIcon="pi pi-pause" />
+    </div>
+
+    <!-- See style.css for required responsive fix -->
+    <p-table styleClass="p-datatable-striped" [rowHover]="true" [value]="targets"
+        [breakpoint]="'960px'" [tableStyle]="{ 'min-width': '25rem' }">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th></th>
+                <th>Target</th>
+                <th>Address</th>
+                <th>Sent</th>
+                <th>Recv</th>
+                <th>Succ</th>
+                <th>Loss</th>
+                <th>Min</th>
+                <th>Avg15m</th>
+                <th>Avg6h</th>
+                <th>Avg24h</th>
+                <th>Max</th>
+                <th>Last</th>
+                <th>Actions</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-target let-columns="columns">
+            <tr>
+                <td class="text-center">
+                    @if(target.Statistics.state === "up"){
+
+                    <span *ngIf="target.Statistics.avg15m <= target.Statistics.avg24h * 1.05"
+                        pTooltip="Target is up and healthy" tooltipPosition="right">
+                        <i class="pi pi-check-circle text-success"></i>
+                    </span>
+
+                    <span *ngIf="target.Statistics.avg15m > target.Statistics.avg24h * 1.05"
+                        pTooltip="Target is up but latency is increasing" tooltipPosition="right">
+                        <i class="pi pi-arrow-up-right text-warning"></i>
+                    </span>
+                    }@else{
+                    <span pTooltip="Target is down" tooltipPosition="right">
+                        <i class="pi pi-exclamation-triangle text-danger"></i>
+                    </span>
+                    }
+
+                </td>
+                <td>
+                    <span class="p-column-title">Target</span>
+                    {{ target.Target.name }}
+                </td>
+                <td>
+                    <span class="p-column-title">Address</span>
+                    {{ target.Target.address }}
+                </td>
+                <td>
+                    <span class="p-column-title">Sent</span>
+                    {{ target.Statistics.sent }}
+                </td>
+                <td>
+                    <span class="p-column-title">Recv</span>
+                    {{ target.Statistics.recv }}
+                </td>
+                <td>
+                    <span class="p-column-title">Succ</span>
+                    @if (target.Statistics.sent > 0){
+                    {{ target.Statistics.recv / target.Statistics.sent | percent: '1.0-2' }}
+                    }
+                </td>
+                <td>
+                    <span class="p-column-title">Loss</span>
+                    @if (target.Statistics.sent > 0){
+                    {{ (target.Statistics.sent - target.Statistics.recv) / target.Statistics.sent | percent: '1.0-2' }}
+                    }
+                    <span class="text-muted">({{target.Statistics?.loss}})</span>
+                </td>
+                <td>
+                    <span class="p-column-title">Min</span>
+                    @if(target.Statistics?.min.Valid){
+                    {{target.Statistics?.min.Float64 | number: '0.3' }}ms
+                    } @else {
+                    -
+                    }
+                </td>
+                <td>
+                    <span class="p-column-title">Avg15m</span>
+                    {{target.Statistics?.avg15m | number: '0.3' }}ms
+                </td>
+                <td>
+                    <span class="p-column-title">Avg6h</span>
+                    {{target.Statistics?.avg6h | number: '0.3' }}ms
+                </td>
+                <td>
+                    <span class="p-column-title">Avg24h</span>
+                    {{target.Statistics?.avg24h | number: '0.3' }}ms
+                </td>
+                <td>
+                    <span class="p-column-title">Max</span>
+                    {{target.Statistics?.max | number: '0.3' }}ms
+                </td>
+                <td>
+                    <span class="p-column-title">Last</span>
+                    {{target.Statistics?.last | number: '0.3' }}ms
+                </td>
+                <td>
+                    <span class="p-column-title">Actions</span>
+                    <p-button icon="pi pi-chart-scatter" [rounded]="true" severity="primary"
+                        (onClick)="showDialog(target.Target)" />
+                    <p-button icon="pi pi-trash" [rounded]="true" severity="danger"
+                        (onClick)="confirmDelete(target.Target)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"
+    acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+
+<p-dialog header="Header" [(visible)]="dialogVisible" [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true" [style]="{ width: '50vw' }"
+    [draggable]="false">
+    <ng-template pTemplate="header">
+        <span class="p-dialog-title">
+            {{ selectedTarget?.name }} - {{ selectedTarget?.address }}
+        </span>
+    </ng-template>
+
+    <div class="w-100 mt-2">
+        <p-selectButton [options]="chartTypes" [(ngModel)]="selectedChart" optionLabel="label" optionValue="value">
+            <ng-template let-item pTemplate>
+                <i [class]="item.icon"></i>
+                {{item.label}}
+            </ng-template>
+        </p-selectButton>
+    </div>
+
+    <div class="mt-2" *ngIf="selectedTarget">
+        <app-scatter-chart *ngIf="selectedChart === 'scatter'" [visible]="dialogVisible"
+            [targetUuid]="selectedTarget.uuid"></app-scatter-chart>
+        <!--
+        <app-heatmap *ngIf="selectedChart === 'heatmap'" [visible]="dialogVisible"
+            [targetUuid]="selectedTarget.uuid"></app-heatmap>
+        -->
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Close" [text]="true" severity="secondary" (onClick)="dialogVisible = false" />
+    </ng-template>
+
+</p-dialog>

@@ -1,0 +1,15 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.ignored
+
+webapp/node_modules
+webapp/build
+webapp/npm-debug.log*
+
+lagident.db
+server/lagident.db

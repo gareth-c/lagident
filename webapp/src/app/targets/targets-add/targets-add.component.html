@@ -1,0 +1,26 @@
+<p-card styleClass="flex-1" class="flex justify-content-center py-2">
+
+    <form [formGroup]="targetForm" #formRef="ngForm" (ngSubmit)="onSubmit()">
+        <div class="formgroup-inline">
+            <div class="field">
+                <label for="name" class="p-sr-only">Name</label>
+                <input type="text" pInputText placeholder="Name" formControlName="name" required />
+                <small class="p-error block" *ngIf="targetForm.hasError('required', 'name') && targetForm.dirty">
+                    Target name is required
+                </small>
+            </div>
+
+            <div class="field">
+                <label for="address" class="p-sr-only">Address</label>
+                <input type="text" pInputText placeholder="192.168.1.1" formControlName="address" required />
+                <small class="p-error block" *ngIf="targetForm.hasError('required', 'address') && targetForm.dirty">
+                    Target address is required
+                </small>
+            </div>
+
+            <p-button label="Submit" type="submit" [disabled]="targetForm.invalid"></p-button>
+        </div>
+
+
+    </form>
+</p-card>

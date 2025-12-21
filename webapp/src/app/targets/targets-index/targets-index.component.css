@@ -1,0 +1,12 @@
+.gradient-headline {
+    background-image: linear-gradient(112.31deg, rgb(0, 224, 143) 19.49%, rgb(0, 163, 255) 98.51%);
+    background-size: auto auto;
+    background-clip: border-box;
+    background-size: 100% auto;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow: 1px 1px 10px rgba(0, 224, 143, 0.3), 4px 4px 10px rgba(0, 163, 255, 0.3);
+}

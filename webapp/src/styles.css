@@ -1,0 +1,75 @@
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+
+html {
+  height: 100%;
+  font-size: 14px;
+}
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+  height: 100%;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-success {
+  color: var(--p-green-500);
+}
+
+.text-warning {
+  color: var(--p-yellow-500);
+}
+
+.text-danger {
+  color: var(--p-red-500);
+}
+
+.text-muted {
+  color: var(--p-surface-400)
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.p-error {
+  color: var(--p-form-field-invalid-placeholder-color)
+}
+
+
+/* Fix PrimeNG responsive table 
+ * Many thanks to: https://github.com/primefaces/primeng/issues/16291#issuecomment-2315359995
+ */
+.p-column-title {
+  display: none;
+}
+
+@media screen and (max-width: 992px) {
+  .p-datatable-tbody>tr>td>.p-column-title {
+    display: block;
+  }
+
+  .p-datatable-tbody>tr>td:not(:last-child) {
+    border: 0 none;
+  }
+
+  .p-datatable-tbody>tr>td {
+    display: flex;
+    width: 100% !important;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .p-datatable-thead>tr>th,
+  .p-datatable-tfoot>tr>td {
+    display: none !important;
+  }
+}
