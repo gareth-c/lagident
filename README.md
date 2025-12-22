@@ -18,6 +18,13 @@ Lagident will keep 3 days of data (~17280 measurements per target) and will disp
 You can use the chart to identify latency spikes or packet loss.
 ![Lagident History Chart](./images/Lagident_Modal.png)
 
+For example the chart for a poor quality Wifi connection can look like in the
+following example.
+As you can see the measured latency is all over the place from 5ms to 100ms most of the time and spikes to 300ms.
+This connection is also suffering from packet loss. (0.33%)
+
+Poor quality connections like this can be a pain for online gaming.
+![Lagident Bad Wifi Connection](./images/Lagident_bad_wifi_connection.png)
 
 ## Motivation
 Meshping does not store any information about packet loss. Unfortunately, I had to deal with strange packet loss issues on my desktop PC. Additionally, I wanted to embed an Angular application into Go for a long time, so I thought this was a cool project to do.
@@ -41,7 +48,7 @@ To start Lagident in production mode, run:
 docker compose up
 ```
 This will build Lagident and start it together with
-its database. Access the Lagident on http://localhost:9933.
+its database. Access Lagident on http://localhost:9933.
 
 ### Standalone with sqlite
 
