@@ -68,6 +68,10 @@ docker run --rm \
  nook24/lagident:latest
 ```
 
+### Docker Compose with sqlite
+```
+docker compose -f docker-compose-sqlite.yml up
+```
 
 ## Configuration
 
