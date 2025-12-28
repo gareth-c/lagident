@@ -1,0 +1,13 @@
+services:
+  lagident:
+    image: nook24/lagident:latest
+    container_name: lagident
+    ports:
+      - 9933:8080
+    environment:
+      PROFILE: prod
+      DB_TYPE: sqlite   
+    volumes:
+      - lagident-sqlite-data:/data
+volumes:
+  lagident-sqlite-data:
